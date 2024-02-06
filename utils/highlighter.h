@@ -16,6 +16,13 @@ public:
 
     ~Highlighter() = default;
 
+
+void searchText(const QString& text);
+
+private:
+    QRegularExpression m_pattern; // Regular expression to search for, in our case, this word or text
+    QTextCharFormat m_format;     // Text formatting, highlighting
+
 protected:
     void highlightBlock(const QString &text) override;
 

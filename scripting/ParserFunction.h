@@ -91,8 +91,8 @@ public:
   
   static void allFunctions();
   static void allVariables();
-  template <class T>
-    static void printVars(const T& container, bool getValues = true);
+  template <class T> static void printVars(const T& container, bool getValues = true);
+  template <class T> static void printVars_log(const T& container, bool getValues = true);
 //  template <class T>
 //    static void printVars_empty(const T& container, bool getValues);
 

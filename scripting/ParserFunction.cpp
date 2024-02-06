@@ -287,10 +287,10 @@ void ParserFunction::allFunctions()
   OS::print("*** All available functions ***", true);
   logger::WriteLog(QString("*** All available functions ***"));
 
-  printVars(s_functions, false);
+  printVars_log(s_functions, false);
 
   OS::print(string(40, '*'), true);
-  logger::WriteLog(QString::fromStdString(string(5, '*')) + "allFunctions (Cycles): " + QString::fromStdString(string(5, '*')));
+  logger::WriteLog_result_execution(QString::fromStdString(string(5, '*')) + "ALL Functions (Cycles): " + QString::fromStdString(string(5, '*')));
 
 }
 
@@ -317,12 +317,12 @@ void ParserFunction::allVariables()
   for (auto it = container.begin(); it != container.end(); ++it) {
     StackLevel& st = *it;
     OS::print("*** Local variables of " + st.name + " ***", true);
-    logger::WriteLog_empty("*** Local variables of " +  QString::fromStdString(st.name) + " ***");
+    logger::WriteLog_result_execution("*** Local variables of " +  QString::fromStdString(st.name) + " ***");
     printVars(st.variables);
   }
   
   OS::print(string(40, '*'), true);
-  logger::WriteLog_empty(QString::fromStdString(string(10, '*')) + "AllVariables: " + QString::fromStdString(string(10, '*')));
+  logger::WriteLog_result_execution(QString::fromStdString(string(10, '*')) + "(result_execution) AllVariables: " + QString::fromStdString(string(10, '*')));
 }
 
 //template <class T>
@@ -330,6 +330,35 @@ void ParserFunction::allVariables()
 //{
 
 //}
+
+template <class T>
+void ParserFunction::printVars_log(const T& container, bool getValues)
+{
+  vector<string> results;
+  results.reserve(container.size());
+
+  for (auto it = container.begin(); it != container.end(); ++it) {
+    const string& name  = it->first;
+
+    if (getValues) {
+      GetVarFunction* impl = dynamic_cast<GetVarFunction*>(it->second->m_impl);
+      string value = impl != nullptr ? impl->getValue().toPrint() : "";
+      results.push_back(name + " (" + value + ")");
+    } else {
+      const string& translation = it->second->getName();
+      string toAdd = name == translation ? name :
+                         name + " (" + translation + ")";
+      results.push_back(toAdd);
+    }
+  }
+
+  std::sort(results.begin(), results.end());
+  for (auto it = results.begin(); it != results.end(); ++it) {
+    OS::print(*it, true);
+    logger::WriteLog(QString::fromStdString(*it)); // log service function: preprocessor
+  }
+
+}
 
 template <class T>
 void ParserFunction::printVars(const T& container, bool getValues)
@@ -355,7 +384,7 @@ void ParserFunction::printVars(const T& container, bool getValues)
   std::sort(results.begin(), results.end());
   for (auto it = results.begin(); it != results.end(); ++it) {
     OS::print(*it, true);
-    //logger::WriteLog(QString::fromStdString(*it));
+    logger::WriteLog_result_execution(QString::fromStdString(*it));
   }
 }
 

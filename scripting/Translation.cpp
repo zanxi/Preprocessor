@@ -133,6 +133,8 @@ void Translation::add(const string& originalName, const string& translation,
                       unordered_map<string, string>& trans2)
 {
   if (translation.find_first_of(" \t\r\n") != string::npos) {
+    logger::WriteLog(QString("ERROR: ") + "Translation of [" + QString::fromStdString(translation) +
+                     "] contains white spaces");
     throw ParsingException("Translation of [" + translation +
                            "] contains white spaces");
   }
@@ -261,7 +263,7 @@ string Translation::translateScript(const string& script,
 void Translation::printScript(const string& script)
 {
   OS::print(script);
-  logger::WriteLog(QString::fromStdString(script));
+  logger::WriteLog_result_execution(QString::fromStdString(script));
   string item;
   string rest;
   
@@ -283,7 +285,7 @@ void Translation::printScript(const string& script)
     if (!item.empty()) {
       if (!rest.empty()) {
         OS::print(rest, false);
-        logger::WriteLog(QString::fromStdString(rest));
+        logger::WriteLog_result_execution(QString::fromStdString(rest));
         rest.clear();
       }
       ParserFunction* func = ParserFunction::getFunction(item);
@@ -294,10 +296,10 @@ void Translation::printScript(const string& script)
                 func->isGlobal() ? OS::Color::RED :
                 OS::Color::GRAY;
         OS::printColor(color, item);
-        logger::WriteLog("Color: " + QString::fromStdString(ENUM_TO_STR(color)));
+        logger::WriteLog_result_execution("Color: " + QString::fromStdString(ENUM_TO_STR(color)));
       } else {
         OS::print(item, false);
-        logger::WriteLog(QString::fromStdString(item));
+        logger::WriteLog_result_execution(QString::fromStdString(item));
       }
       item.clear();
     }
@@ -305,9 +307,9 @@ void Translation::printScript(const string& script)
     //OS::print(string(1, ch));
   }
   OS::print(rest, false);
-  logger::WriteLog(QString::fromStdString(rest));
+  logger::WriteLog_result_execution(QString::fromStdString(rest));
   OS::print(item, false);
-  logger::WriteLog(QString::fromStdString(item));
+  logger::WriteLog_empty(QString::fromStdString(item));
 }
 
 void Translation::loadErrors(const string& filename)
@@ -416,6 +418,7 @@ void Translation::throwException(const ParsingScript& script,
     msg += script.getFilename().empty() ? Constants::NEW_LINE : " ";
     msg += lineMsg;
   }
+  logger::WriteLog("ERROR: " + QString::fromStdString(msg));
   throw ParsingException(msg);
 }
 

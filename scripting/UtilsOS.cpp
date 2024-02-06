@@ -192,6 +192,8 @@ void OS::chdir(const string& dir)
   string dirCopy = dir.empty() ? homeDir() : dir;
   int code = ::chdir(dirCopy.c_str());
   if (code != 0) {
+    //logger::WriteLog(QString("ERROR: ") + "Couldn't find thread [" + QString::fromStdString(threadIdStr) + "]");
+    logger::WriteLog(QString("ERROR: ") + QString("Couldn't change to directory [") + QString::fromStdString(dir) + "]");
     throw ParsingException("Couldn't change to directory [" + dir + "]");
   }
 }
@@ -200,6 +202,7 @@ string OS::getParentDir(const string& dir)
 {
   string dirCopy = dir.empty() ? pwd() : dir;
   if (dirCopy.empty()) {
+    logger::WriteLog(QString("ERROR: ") + QString::fromStdString("Couldn't get current directory"));
     throw ParsingException("Couldn't get current directory");
   }
   
@@ -345,6 +348,7 @@ void OS::appendLine(const string& filename, const string& msg,
 {
   ofstream file(filename, std::ios_base::app | std::ios_base::out);
   if (!file.is_open()) {
+    logger::WriteLog(QString("ERROR: ") + "Couldn't write to [" + QString::fromStdString(filename) + "]" );
     throw ParsingException("Couldn't write to [" + filename + "]");
   }
   file << msg << msg2 << msg3 << msg4 << msg5 << endl;
@@ -355,6 +359,7 @@ void OS::writeFile(const string& filename, const string& msg)
 {
   ofstream file(filename);
   if (!file.is_open()) {
+    logger::WriteLog(QString("ERROR: ") + "Couldn't write to [" + QString::fromStdString(filename) + "]");
     throw ParsingException("Couldn't write to [" + filename + "]");
   }
   file << msg << endl;
@@ -546,6 +551,7 @@ void OS::touch(const string& filename)
   if (!pathExists(filename)) {
     ofstream file(filename, std::ios_base::app | std::ios_base::out);
     if (!file.is_open()) {
+      logger::WriteLog(QString("ERROR: ") + "Couldn't touch [" + QString::fromStdString(filename) + "]");
       throw ParsingException("Couldn't touch [" + filename + "]");
     }
     file << "";
@@ -555,6 +561,7 @@ void OS::touch(const string& filename)
   
   bool success = !utime(filename.c_str(), 0);
   if (!success) {
+    logger::WriteLog(QString("ERROR: ") + "Couldn't touch [" + QString::fromStdString(filename) + "]");
     throw ParsingException("Couldn't touch [" + filename + "]");
   }
   
@@ -604,10 +611,12 @@ void OS::getFiles(string& pathname,
 {
   string pathCopy = pathname.empty() ? pwd() : pathname;
   if (pathCopy.empty()) {
+    logger::WriteLog(QString("ERROR: ") + "Couldn't get working directory");
     throw ParsingException("Couldn't get working directory");
   }
   
   if (!pathExists(pathCopy)) {
+    logger::WriteLog(QString("ERROR")+"Pathname [" + QString::fromStdString(pathCopy) + "] doesn't exist");
     throw ParsingException("Pathname [" + pathCopy + "] doesn't exist");
   }
   if (!isDir(pathCopy)) {
@@ -664,6 +673,7 @@ void OS::getFiles(string& pathname,
 #else
   DIR* directory = opendir(pathCopy.c_str());
   if (directory == 0) {
+    logger::WriteLog(QString("ERROR")+"Couldn't open directory [" + QString::fromStdString(pathCopy) + "]");
     throw ParsingException("Couldn't open directory [" + pathCopy + "]");
   }
   
@@ -823,6 +833,8 @@ void OS::cp(const string& src, const string& dst)
                           NULL, COPYFILE_ALL | COPYFILE_RECURSIVE);
 #endif
   if (status != 0) {
+    logger::WriteLog(QString("ERROR") + "Couldn't copy path [" +
+                     QString::fromStdString(srcPath) + "] --> [" + QString::fromStdString(dstPath) + "]");
     throw ParsingException("Couldn't copy path [" +
                            srcPath + "] --> [" + dstPath + "]");
   }

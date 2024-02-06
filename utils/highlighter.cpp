@@ -290,7 +290,8 @@ Highlighter::Highlighter(QTextDocument *parent)
     highlightingRules.append(rule);
 
     functionFormat.setFontItalic(true);
-    functionFormat.setForeground(Qt::lightGray);
+    functionFormat.setForeground(Qt::red);
+    //functionFormat.setForeground(QColor("#0080C0"));
     rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
     rule.format = functionFormat;
     highlightingRules.append(rule);
@@ -304,6 +305,28 @@ Highlighter::Highlighter(QTextDocument *parent)
     multiLineCommentFormat.setForeground(QColor("#56A349"));
 
 }
+
+void Highlighter::searchText(const QString& text)
+{
+    // Set the text as a regular expression.
+    m_pattern = QRegularExpression(text);
+    rehighlight(); // Restart the backlight
+}
+/*
+void Highlighter::highlightBlock(const QString& text)
+{
+    // Using a regular expression, we find all matches.
+    QRegularExpressionMatchIterator matchIterator = m_pattern.globalMatch(text);
+    while (matchIterator.hasNext())
+    {
+        // Highlight all matches
+        QRegularExpressionMatch match = matchIterator.next();
+        setFormat(match.capturedStart(), match.capturedLength(), m_format);
+    }
+}
+
+/**/
+
 
 
 void Highlighter::highlightBlock(const QString &text)
@@ -335,3 +358,5 @@ void Highlighter::highlightBlock(const QString &text)
         startIndex = text.indexOf(commentStartExpression, startIndex + commentLength);
     }
 }
+
+/**/

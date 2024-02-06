@@ -44,7 +44,9 @@ Variable StringOrNumberFunction::evaluate(ParsingScript& script)
   char* x;
   double num = ::strtod(m_item.c_str(), &x);
   if (std::strlen(x) > 0) {
+    logger::WriteLog("ERROR: parseToken: " +  QString::fromStdString(m_item) +  " | parseTokenExtra");
     Translation::throwException(script, "parseToken", m_item, "parseTokenExtra");
+
 
     /*string msg = Translation::getErrorString("parseToken");
     Utils::replace(msg, "{0}", m_item);
@@ -217,8 +219,10 @@ Variable SubstrFunction::evaluate(ParsingScript& script)
     Variable length = Utils::getItem(script);
     Utils::checkNonNegInteger(length);
     if (init.numValue + length.numValue > arg.size()) {
+        logger::WriteLog(QString("ERROR: ")+ "The substring length is larger than [" +
+                         QString::fromStdString(arg) + "]");
       throw ParsingException("The substring length is larger than [" +
-                             arg + "]");
+                              arg + "]");
     }
     substring = arg.substr((size_t)init.numValue, (size_t)length.numValue);
   }
@@ -297,10 +301,10 @@ Variable PrintFunction::evaluate(ParsingScript& script)
   for (size_t i = 0; i < args.size(); i++) {
     if (m_color == OS::Color::NONE) {
       OS::print(args[i].toString());
-      logger::WriteLog(QString::fromStdString(args[i].toString()));
+      logger::WriteLog_result_execution(QString::fromStdString(args[i].toString()));
     } else {
       OS::printColor(m_color, args[i].toString());
-      logger::WriteLog(QString("Color: ") + QString::fromStdString(ENUM_TO_STR(m_color)) + "|" + QString::fromStdString(args[i].toString()));
+      logger::WriteLog_result_execution(QString("Color: ") + QString::fromStdString(ENUM_TO_STR(m_color)) + "|" + QString::fromStdString(args[i].toString()));
 
     }
   }
@@ -328,6 +332,7 @@ Variable ThrowFunction::evaluate(ParsingScript& script)
   string result = arg.toString();
   
   // 3. Throw it!
+  logger::WriteLog("ERROR: " + QString::fromStdString(result));
   throw ParsingException(result);
 }
 
@@ -415,6 +420,9 @@ Variable* GetVarFunction::extractArrayElement(Variable* array,
     size_t arrayIndex = currLevel->getArrayIndex(index);
     
     if (arrayIndex >= currLevel->tuple.size()) {
+      logger::WriteLog("ERROR: " "Unknown index [" + QString::fromStdString(index.toString()) +
+                       "] for tuple of size " +
+                       QString::fromStdString(to_string(currLevel->tuple.size())));
       throw ParsingException("Unknown index [" + index.toString() +
                              "] for tuple of size " +
                              to_string(currLevel->tuple.size()));
@@ -884,6 +892,7 @@ Variable ReadnumFunction::evaluate(ParsingScript& script)
   char* x;
   double num = ::strtod(input.c_str(), &x);
   if (::strlen(x) > 0) {
+    logger::WriteLog(QString("ERROR: ") + "Couldn't read number [" + QString::fromStdString(input) + "]");
     throw ParsingException("Couldn't read number [" + input + "]");
   }
 
@@ -973,6 +982,8 @@ Variable ThreadFunction::evaluate(ParsingScript& script)
     
     auto it = g_threads.find(threadIdStr);
     if (it != g_threads.end()) {
+      logger::WriteLog(QString("ERROR: ") + "Couldn't find thread [" +
+                       QString::fromStdString(threadIdStr) + "]");
       throw ParsingException("Couldn't find thread [" +
                              threadIdStr + "]");
 

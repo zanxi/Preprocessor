@@ -44,6 +44,20 @@
               </widget>
              </item>
              <item>
+              <widget class="QPushButton" name="pushButton_open_script">
+               <property name="text">
+                <string>Open script</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_savescript">
+               <property name="text">
+                <string>Save</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QPushButton" name="pushButton_2">
                <property name="text">
                 <string>Exit</string>
@@ -62,6 +76,16 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
+            <widget class="QPushButton" name="pushButton_exe_search">
+             <property name="text">
+              <string>search</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_execution_search"/>
+           </item>
+           <item>
             <widget class="QTextEdit" name="textEdit_execution"/>
            </item>
           </layout>
@@ -75,6 +99,16 @@
          <string>Log</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="pushButton_log_search">
+           <property name="text">
+            <string>search</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_log_search"/>
+         </item>
          <item>
           <widget class="QTextEdit" name="textEdit_log"/>
          </item>
@@ -91,9 +125,16 @@
      <x>0</x>
      <y>0</y>
      <width>1090</width>
-     <height>17</height>
+     <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen_2"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -104,6 +145,16 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionOpen_2">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

@@ -49,7 +49,8 @@ SOURCES += \
     utils/qcustomplot.cpp \
     utils/UtilsT.cpp \
     dataanimals.cpp \
-    utils/highlighter.cpp
+    utils/highlighter.cpp \
+    utils/searchhightlight.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -75,7 +76,8 @@ HEADERS += \
     utils/qcustomplot.h \
     utils/UtilsT.h \
     dataanimals.h \
-    utils/highlighter.h
+    utils/highlighter.h \
+    utils/searchhightlight.h
 
 FORMS += \
         mainwindow.ui

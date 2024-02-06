@@ -32,7 +32,7 @@
     {
         //log+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
         DataSystems::Instance().log+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
-        if(DataSystems::Instance().log.size()>8000)DataSystems::Instance().log = "";
+        //if(DataSystems::Instance().log.size()>18000)DataSystems::Instance().log = "";
 
     }
 
@@ -40,7 +40,7 @@
     {
         //log+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
         DataSystems::Instance().log_execution_result+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
-        if(DataSystems::Instance().log_execution_result.size()>8000)DataSystems::Instance().log_execution_result = "";
+        //if(DataSystems::Instance().log_execution_result.size()>18000)DataSystems::Instance().log_execution_result = "";
 
     }
 

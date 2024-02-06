@@ -3,10 +3,11 @@
 
 #include <QDebug>
 #include <QObject>
+#include <QFileDialog>
 
 #include "Debug/logger.h"
 #include "dataanimals.h"
-#include "utils/highlighter.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -59,6 +60,29 @@ MainWindow::MainWindow(QWidget *parent) :
         "padding: 4 50 4 10;"
         );
 
+    ui->pushButton_open_script->setStyleSheet(
+        "background-color:"+DataSystems::Instance().settings___color_header+";"
+                                                                                "color: white;"
+                                                                                "padding: 4 50 4 10;"
+        );
+    ui->pushButton_savescript->setStyleSheet(
+        "background-color:"+DataSystems::Instance().settings___color_header+";"
+                                                                                "color: white;"
+                                                                                "padding: 4 50 4 10;"
+        );
+
+    ui->pushButton_exe_search->setStyleSheet(
+        "background-color:"+DataSystems::Instance().settings___color_header+";"
+                                                                                "color: white;"
+                                                                                "padding: 4 50 4 10;"
+        );
+    ui->pushButton_log_search->setStyleSheet(
+        "background-color:"+DataSystems::Instance().settings___color_header+";"
+                                                                                "color: white;"
+                                                                                "padding: 4 50 4 10;"
+        );
+
+
 
     //this->maximumSize();
     //run();
@@ -71,9 +95,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->textEdit_execution->setStyleSheet("background-color: rgb(208, 255, 208)");
     ui->textEdit_log->setStyleSheet("background-color: rgb(208, 255, 208)");
 
-    Highlighter *highlighter = new Highlighter(ui->textEdit_code->document());
-    Highlighter *highlighter2 = new Highlighter(ui->textEdit_execution->document());
-    Highlighter *highlighter3 = new Highlighter(ui->textEdit_log->document());
+    highlighter_code = new Highlighter(ui->textEdit_code->document());
+    highlighter_execution = new Highlighter(ui->textEdit_execution->document());
+    highlighter_log = new Highlighter(ui->textEdit_log->document());
+
+    searchHighLight_execution = new SearchHighLight(ui->textEdit_execution->document());
+    searchHighLight_log = new SearchHighLight(ui->textEdit_log->document());
 
     ui->textEdit_code->setText(
                 "a=357/113;"
@@ -85,11 +112,15 @@ MainWindow::MainWindow(QWidget *parent) :
                                 //"print(a);");
                 //"\nc=a;"); //QString::fromStdString(script));
 
+    OpenFileScript(DataSystems::Instance().savePath+"/"+"src_zero.txt");
+
 
 
     logTimer = new QTimer(this);
     connect(logTimer, SIGNAL(timeout()),this,SLOT(updateLog()));
     //logTimer->start(250);
+
+    connect(ui->actionOpen_2 , SIGNAL(triggered()), SLOT(OpenFileScript()));
 
 }
 
@@ -98,12 +129,112 @@ void MainWindow::updateLog()
    ui->textEdit_log->setText(DataSystems::Instance().log);
    ui->textEdit_execution->setText(DataSystems::Instance().log_execution_result);
 
+   QTextCursor cursor_log = ui->textEdit_log->textCursor();
+   cursor_log.movePosition(QTextCursor::End);
+   ui->textEdit_log->setTextCursor(cursor_log);
+
+   QTextCursor cursor_execution = ui->textEdit_execution->textCursor();
+   cursor_execution.movePosition(QTextCursor::End);
+   ui->textEdit_execution->setTextCursor(cursor_execution);
+
+
+   logger::WriteMsg("Log compilation & executions");
+   logger::WriteMsg(DataSystems::Instance().log_execution_result.toStdString());
+   logger::WriteMsg("Log actions");
+   logger::WriteMsg(DataSystems::Instance().log.toStdString());
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+    if (keyEvent->key() == Qt::Key_Enter) {
+        qDebug() << ("keyPressEvent: Enter received");
+    }
+    else if (keyEvent->key() == Qt::Key_A)
+    {
+        qDebug() << ("keyPressEvent: A received");
+    }
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event)
+{
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+    if (keyEvent->key() == Qt::Key_Enter) {
+        qDebug() << ("keyReleaseEvent: Enter received");
+    }
+    else if (keyEvent->key() == Qt::Key_A)
+    {
+        qDebug() << ("keyReleaseEvent: A received");
+    }
+    else if (keyEvent->key() == Qt::Key_Escape)
+    {
+        qDebug() << ("keyReleaseEvent: Escape received");
+        QMessageBox::information(this,"Спасибо","Вы вышли из программы");
+        QApplication::closeAllWindows();
+        QApplication::quit();
+    }
+}
+
+
+void MainWindow::OpenFileScript()
+{
+
+    //QString fileName = QFileDialog::getOpenFileName(this,  tr("Open Directory"), DataSystems::Instance().savePath, filter=audioFormats);
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setNameFilter(tr("Scripts (*.h *.txt *.cpp)"));
+    dialog.setDirectory(DataSystems::Instance().savePath);
+    dialog.setViewMode(QFileDialog::Detail);
+
+    QString fileScript = dialog.getOpenFileName();
+    if(fileScript.isEmpty())
+    {
+        logger::WriteLog("No file name ");
+        QMessageBox::information(this,"файл не выбран","Повторите операцию");
+        return;
+    }
+    logger::WriteLog("File script: [" + fileScript + "]");
+    updateLog();
+
+    QFile *localFile = new QFile(fileScript);
+    localFile->open(QFile::ReadOnly);
+    QTextStream in(localFile);
+    ui->textEdit_code->setText(in.readAll());
+    localFile->close();
+
+
+}
+
+void MainWindow::OpenFileScript(QString fileScript)
+{
+    logger::WriteLog("File script: [" + fileScript + "]");
+    updateLog();
+
+    QFileInfo f_info(fileScript);
+    if(fileScript.isEmpty())
+    {
+        logger::WriteLog("No file name ");
+        return;
+    }
+    if(!f_info.exists())
+    {
+        logger::WriteLog("File not exists: "+fileScript);
+        return;
+    }
+
+    QFile *localFile = new QFile(fileScript);
+    localFile->open(QFile::ReadOnly);
+    QTextStream in(localFile);
+    ui->textEdit_code->setText(in.readAll());
+    localFile->close();
+}
+
 
 void MainWindow::run()
 {
@@ -317,3 +448,86 @@ void MainWindow::on_pushButton_clicked()
     run();
     updateLog();
 }
+
+void MainWindow::on_pushButton_open_script_clicked()
+{
+    OpenFileScript();
+}
+
+
+void MainWindow::on_pushButton_savescript_clicked()
+{
+    QString fileScript = DataSystems::Instance().savePath+"/"+ QString("script_cscs")+QString::fromStdString(logger::CreateLogName2())+".txt";
+    QFile *localFile = new QFile(fileScript);
+    localFile->open(QFile::WriteOnly);
+    QTextStream out(localFile);
+    out<<ui->textEdit_code->toPlainText();
+    localFile->close();
+
+    QMessageBox::information(this,"Скрипт сохранен в файл",fileScript);
+
+    logger::WriteLog("Скрипт сохранен в файл"+fileScript);
+    updateLog();
+
+
+}
+
+
+void MainWindow::on_pushButton_exe_search_clicked()
+{
+    searchHighLight_execution->searchText(ui->lineEdit_execution_search->text().toLower());
+
+    QTextCursor cursor=ui->textEdit_execution->textCursor();
+    cursor.setPosition(cursor.position());
+    cursor.setPosition(cursor.position()+ui->lineEdit_execution_search->text().toLower().size(),QTextCursor::KeepAnchor);
+    QTextCharFormat charFormat = cursor.charFormat();
+    charFormat.setBackground(QColor(150, 200, 250));
+    cursor.setCharFormat(charFormat);
+    ui->textEdit_execution->setTextCursor(cursor);
+
+
+//    QTextCursor cursor_execution = ui->textEdit_execution->textCursor();
+//    cursor_execution.movePosition(QTextCursor::End);
+//    ui->textEdit_execution->setTextCursor(cursor_execution);
+//    ui->textEdit_execution->selectAll();
+
+    //logger::WriteLog(ui->lineEdit_execution_search->text().toLower());
+    //updateLog();
+}
+
+
+void MainWindow::on_pushButton_log_search_clicked()
+{
+    searchHighLight_log->searchText(ui->lineEdit_log_search->text().toLower());
+
+
+    QTextCursor cursor=ui->textEdit_log->textCursor();
+    cursor.setPosition(cursor.position());
+    cursor.setPosition(cursor.position()+ui->lineEdit_log_search->text().toLower().size(),QTextCursor::KeepAnchor);
+    QTextCharFormat charFormat = cursor.charFormat();
+    charFormat.setBackground(QColor(150, 200, 250));
+    cursor.setCharFormat(charFormat);
+    ui->textEdit_log->setTextCursor(cursor);
+
+    //highlighter_log->searchText(ui->lineEdit_log_search->text().toLower());
+    //logger::WriteLog(ui->lineEdit_log_search->text().toLower());
+    //updateLog();
+}
+
+
+void MainWindow::on_lineEdit_log_search_cursorPositionChanged(int arg1, int arg2)
+{
+    on_lineEdit_log_search_cursorPosition_arg1 = arg1;
+    on_lineEdit_log_search_cursorPosition_arg2 = arg2;
+
+}
+
+
+void MainWindow::on_lineEdit_execution_search_cursorPositionChanged(int arg1, int arg2)
+{
+    on_lineEdit_execution_search_cursorPosition_arg1 = arg1;
+    on_lineEdit_execution_search_cursorPosition_arg2 = arg2;
+
+
+}
+

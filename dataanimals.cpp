@@ -128,8 +128,30 @@ void DataSystems::clear()
     settings___color_header="#2222FF"; // синий   (34,34,255)
     settings___color_header___decimal="(34,34,255)"; // синий   (34,34,255)
 
-    //settings___color_header="#FF0000"; // красный (255,0,0)
-    //settings___color_header___decimal="(255,0,0)"; //    (255,108,108)
+    settings___color_header="#DB24C9"; //    (219,36,201)
+    settings___color_header___decimal="(219,36,201)"; // синий   (219,36,201)
+
+    settings___color_header="#DEE173"; //    ()
+    settings___color_header___decimal="(222, 225, 115)"; // синий   ()
+
+    settings___color_header="#5999B5"; //    ()
+    settings___color_header___decimal="(89, 153, 181)"; // синий   ()
+
+    settings___color_header="#"; //    ()
+    settings___color_header___decimal="()"; // синий   ()
+
+    settings___color_header="#"; //    ()
+    settings___color_header___decimal="()"; // синий   ()
+
+
+
+    settings___color_header="#FF6C6C"; // красный (255,108,108)
+    settings___color_header_dialog="#ffffff"; //
+    settings___color_header___decimal="(255,108,108)"; //    (255,108,108)
+
+    settings___color_header="#14B143"; // зеленый (20,177,67)
+    settings___color_header___decimal="(20,177,67)"; //    (20,177,67)
+
 
     settings___tabwidget_width="200px";
 
@@ -142,6 +164,9 @@ void DataSystems::clear()
     log_execution_result = "";
     log_create_db="";
     mj.clear();
+
+    log_execution_result__lists.clear();
+    log__lists.clear();
 
     mjpj.clear();
     db_sql.clear();

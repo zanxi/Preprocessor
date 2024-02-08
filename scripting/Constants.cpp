@@ -56,6 +56,12 @@ const string Constants::LOG         = "log";
 const string Constants::MORE        = "more";
 const string Constants::PI          = "pi";
 const string Constants::POW         = "pow";
+
+const string Constants::STARTPROGRAM_2 = "startprogram_2"; // start: visiocode, qtcreator, qtcreator // maple, msword, msexcel
+const string Constants::STARTPROGRAM_3 = "startprogram_3"; // start: anydesk, paint, visiocode
+const string Constants::STARTPROGRAM = "startprogram"; // start: digitalfarm, tcptransferclient, tcptransferserver
+const string Constants::ADDSHOW     = "addshow"; // Dialog view photo
+
 const string Constants::PRINT       = "print";
 const string Constants::PRINT_BLACK = "printblack";
 const string Constants::PRINT_GRAY  = "printgray";

@@ -915,6 +915,7 @@ void OS::rm(const string& path)
 
 void OS::print(const string& str, bool newLine)
 {
+  return;
   showCursor(true);
 #ifdef _WIN32
   if (!str.empty()) {
@@ -979,6 +980,7 @@ void OS::printColor(OS::Color color, const string& str, bool newLine)
 
 void OS::printError(const string& str, bool newLine)
 {
+  return;
   OS::printColor(OS::Color::RED, str, newLine);
 }
 

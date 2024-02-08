@@ -25,6 +25,7 @@
 #include "utils/searchhightlight.h"
 
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -39,6 +40,7 @@ public:
 
     virtual void keyPressEvent(QKeyEvent * event);
     virtual void keyReleaseEvent(QKeyEvent * event);
+    void update_ImageLoad();
 
 private slots:
     void on_pushButton_clicked();
@@ -70,6 +72,7 @@ private:
     int on_lineEdit_execution_search_cursorPosition_arg1;
     int on_lineEdit_execution_search_cursorPosition_arg2;
 
+    void Addshow();
 
     //QString fileName;
 
@@ -82,8 +85,13 @@ private slots:
     void on_lineEdit_log_search_cursorPositionChanged(int arg1, int arg2);
    void on_lineEdit_execution_search_cursorPositionChanged(int arg1, int arg2);
 
-   private:
+    void on_pushButton_3_clicked();
+   void on_pushButton_clear_log_exec_clicked();
+    void on_comboBox_scripts_activated(int index);
+
+private:
     Ui::MainWindow *ui;
+
 };
 
 #endif // MAINWINDOW_H

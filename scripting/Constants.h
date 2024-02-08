@@ -99,6 +99,12 @@ public:
   static const string MORE;
   static const string PI;
   static const string POW;
+
+  static const string STARTPROGRAM;
+  static const string STARTPROGRAM_2;
+  static const string STARTPROGRAM_3;
+  static const string ADDSHOW;
+
   static const string PRINT;
   static const string PRINT_BLACK;
   static const string PRINT_GRAY;

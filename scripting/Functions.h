@@ -130,6 +130,39 @@ public:
 };
 
 //-------------------------------------------
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+class AddShowFunction : public ParserFunction
+{
+  public:
+  virtual Variable evaluate(ParsingScript& script);
+};
+
+//-------------------------------------------
+
+class StartProgramFunction : public ParserFunction
+{
+  public:
+  virtual Variable evaluate(ParsingScript& script);
+};
+
+//-------------------------------------------
+
+class StartProgram_2Function : public ParserFunction
+{
+  public:
+  virtual Variable evaluate(ParsingScript& script);
+};
+
+//-------------------------------------------
+
+class StartProgram_3Function : public ParserFunction
+{
+  public:
+  virtual Variable evaluate(ParsingScript& script);
+};
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//-------------------------------------------
 class PrintFunction : public ParserFunction
 {
 public:

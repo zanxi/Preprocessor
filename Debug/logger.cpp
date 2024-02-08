@@ -31,16 +31,20 @@
     void logger::WriteLog(QString msg)
     {
         //log+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
-        DataSystems::Instance().log+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
+        //DataSystems::Instance().log+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
         //if(DataSystems::Instance().log.size()>18000)DataSystems::Instance().log = "";
+
+        DataSystems::Instance().log__lists.append(QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg);
 
     }
 
     void logger::WriteLog_result_execution(QString msg)
     {
         //log+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
-        DataSystems::Instance().log_execution_result+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
+        //DataSystems::Instance().log_execution_result+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
         //if(DataSystems::Instance().log_execution_result.size()>18000)DataSystems::Instance().log_execution_result = "";
+
+        DataSystems::Instance().log_execution_result__lists.append(QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg);
 
     }
 

@@ -42,6 +42,12 @@ void Interpreter::init()
   ParserFunction::addGlobalFunction(Constants::MORE,        new MoreFunction());
   ParserFunction::addGlobalFunction(Constants::PI,          new PiFunction());
   ParserFunction::addGlobalFunction(Constants::POW,         new PowFunction());
+
+  ParserFunction::addGlobalFunction(Constants::ADDSHOW,       new AddShowFunction());
+  ParserFunction::addGlobalFunction(Constants::STARTPROGRAM,  new StartProgramFunction());
+  ParserFunction::addGlobalFunction(Constants::STARTPROGRAM_2,  new StartProgram_2Function());
+  ParserFunction::addGlobalFunction(Constants::STARTPROGRAM_3,  new StartProgram_3Function());
+
   ParserFunction::addGlobalFunction(Constants::PRINT,       new PrintFunction(true));
   ParserFunction::addGlobalFunction(Constants::PRINT_BLACK, new PrintFunction(true, OS::Color::BLACK));
   ParserFunction::addGlobalFunction(Constants::PRINT_GRAY,  new PrintFunction(true, OS::Color::GRAY));

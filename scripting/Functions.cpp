@@ -19,6 +19,10 @@
 #include "UtilsOS.h"
 
 #include "Debug/logger.h"
+#include "dataanimals.h"
+#include "dialog_viewphoto.h"
+#include <QProcess>
+
 
 //using namespace ;
 
@@ -290,6 +294,184 @@ Variable SizeFunction::evaluate(ParsingScript& script)
   
   return Variable(size);
 }
+
+//-------------------------------------------
+
+Variable AddShowFunction::evaluate(ParsingScript& script)
+{
+  QString fileNamePicture = DataSystems::Instance().savePath + "/" + "mylene_farmer.jpg";
+  logger::WriteLog_result_execution(QString() + "AddShow() " + " | " + fileNamePicture);
+  //fileNamePicture = "https://demotivatorium.ru/sstorage/3/2014/09/13001529222202/demotivatorium_ru_a_chto_eto_vi_tut_delaete_a_58272.jpg";
+  Dialog_ViewPhoto dvf2(fileNamePicture);
+
+  if(!(dvf2.exec()==QDialog::Accepted))
+  {
+      //QMessageBox::information(this,"Спасибо","Сухостойность");
+  }
+
+    return Variable::emptyInstance;
+}
+
+
+//-------------------------------------------
+
+Variable StartProgram_2Function::evaluate(ParsingScript& script)
+{
+
+    //QProcess vec;
+    //vec.start("D:/_2023_/_Src__4__/_release_gen_db_lely/prolely.exe");
+    //vec.waitForFinished(-1);
+
+    //qDebug()<<"StartProgram";
+    //logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/_Src__Release__/_release_gen_db_DigitalFarm/digitalfarm.exe");
+
+    {
+    QProcess process;
+    process.setProgram("cmd.exe");
+    process.setArguments(QStringList() << "/C" <<  "start" << "C:/Program Files/Microsoft VS Code/Code.exe");
+    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/Program Files/Microsoft VS Code/Code.exe");
+    process.startDetached();
+    }
+
+    {
+    QProcess process;
+    process.setProgram("cmd.exe");
+    process.setArguments(QStringList() << "/C" <<  "start" << "C:/Qt/Tools/QtCreator/bin/qtcreator.exe");
+    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/Qt/Tools/QtCreator/bin/qtcreator.exe");
+    process.startDetached();
+    }
+
+    {
+    QProcess process;
+    process.setProgram("cmd.exe");
+    process.setArguments(QStringList() << "/C" <<  "start" << "C:/Qt/Tools/QtCreator/bin/qtcreator.exe");
+    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/Qt/Tools/QtCreator/bin/qtcreator.exe");
+    process.startDetached();
+    }
+
+    //C:\Qt\Tools\QtCreator\bin\qtcreator.exe
+
+//    {
+//    QProcess process1;
+//    process1.setProgram("cmd.exe");
+//    process1.setArguments(QStringList() << "/C" <<  "start" << "C:/Program Files/Maple 17/bin.X86_64_WINDOWS/maplew.exe");
+//    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/Program Files/Maple 17/bin.X86_64_WINDOWS/maplew.exe");
+//    process1.startDetached();
+//    }
+
+
+
+//    {
+//    QProcess process;
+//    process.setProgram("cmd.exe");
+//    process.setArguments(QStringList() << "/C" <<  "start" << "C:/Program Files (x86)/Microsoft Office/Office16/EXCEL.EXE");
+//    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/Program Files (x86)/Microsoft Office/Office16/EXCEL.EXE");
+//    process.startDetached();
+//    }
+
+//    {
+//    QProcess process;
+//    process.setProgram("cmd.exe");
+//    process.setArguments(QStringList() << "/C" <<  "start" << "C:/Program Files (x86)/Microsoft Office/Office16/WINWORD.EXE");
+//    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/Program Files (x86)/Microsoft Office/Office16/WINWORD.EXE");
+//    process.startDetached();
+//    }
+
+    return Variable::emptyInstance;
+}
+
+
+//-------------------------------------------
+
+Variable StartProgram_3Function::evaluate(ParsingScript& script)
+{
+
+
+    {
+    QProcess process1;
+    process1.setProgram("cmd.exe");
+    process1.setArguments(QStringList() << "/C" <<  "start" << "C:/Users/zanxi/AppData/Local/anydesk/anydesk.exe");
+    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/Users/zanxi/AppData/Local/anydesk/anydesk.exe");
+    process1.startDetached();
+    }
+
+
+
+    {
+    QProcess process;
+    process.setProgram("cmd.exe");
+    process.setArguments(QStringList() << "/C" <<  "start" << "%windir%/system32/mspaint.exe");
+    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "%windir%/system32/mspaint.exe");
+    process.startDetached();
+    }
+
+    {
+    QProcess process;
+    process.setProgram("cmd.exe");
+    process.setArguments(QStringList() << "/C" <<  "start" << "C:/Program Files/Microsoft VS Code/Code.exe");
+    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/Program Files/Microsoft VS Code/Code.exe");
+    process.startDetached();
+    }
+
+
+    return Variable::emptyInstance;
+}
+
+
+
+//-------------------------------------------
+
+Variable StartProgramFunction::evaluate(ParsingScript& script)
+{
+
+    //QProcess vec;
+    //vec.start("D:/_2023_/_Src__4__/_release_gen_db_lely/prolely.exe");
+    //vec.waitForFinished(-1);
+
+    //qDebug()<<"StartProgram";
+    //logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/_Src__Release__/_release_gen_db_DigitalFarm/digitalfarm.exe");
+
+    // C:/Program Files/PostgreSQL/10/pgAdmin 4/bin/pgAdmin4.exe
+
+    {
+    QProcess process;
+    process.setProgram("cmd.exe");
+    process.setArguments(QStringList() << "/C" <<  "start" << "C:/Program Files/Microsoft VS Code/Code.exe");
+    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/Program Files/Microsoft VS Code/Code.exe");
+    process.startDetached();
+    }
+
+
+    QProcess process1;
+    process1.setProgram("cmd.exe");
+    process1.setArguments(QStringList() << "/C" <<  "start" << "C:/_Src__Release__/_release_gen_db_DigitalFarm/digitalfarm.exe");
+    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/_Src__Release__/_release_gen_db_DigitalFarm/digitalfarm.exe");
+    process1.startDetached();
+
+
+
+    {
+    QProcess process;
+    process.setProgram("cmd.exe");
+    process.setArguments(QStringList() << "/C" <<  "start" << "C:/_Src__Release__/_release_gen_db_DigitalFarm/TcpTransferServer.exe");
+    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/_Src__Release__/_release_gen_db_DigitalFarm/TcpTransferServer.exe");
+    process.startDetached();
+    }
+
+    {
+    QProcess process;
+    process.setProgram("cmd.exe");
+    process.setArguments(QStringList() << "/C" <<  "start" << "C:/_Src__Release__/_release_gen_db_DigitalFarm/TcpTransferClient.exe");
+    logger::WriteLog_result_execution(QString() + "Start program: " + "/C" +  "start" + "C:/_Src__Release__/_release_gen_db_DigitalFarm/TcpTransferClient.exe");
+    process.startDetached();
+    }
+
+    return Variable::emptyInstance;
+}
+
+
+
+
 
 //-------------------------------------------
 Variable PrintFunction::evaluate(ParsingScript& script)

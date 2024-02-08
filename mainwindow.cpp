@@ -4,9 +4,13 @@
 #include <QDebug>
 #include <QObject>
 #include <QFileDialog>
+#include <QRgb>
 
 #include "Debug/logger.h"
+#include "csv/csvfile.h"
 #include "dataanimals.h"
+#include "dialog_viewphoto.h"
+#include "dialog_namefile.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -16,11 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     DataSystems::Instance().clear();
+    logger::ClearLog();
 
     //***************** Установка белого цвета приложения и размеров ****************************//
     QPalette pal = this->palette();
     pal.setColor(QPalette::Window, Qt::gray);
-    this->setPalette(pal);
+    //pal.setColor(QPalette::Window, QRgb(89, 153, 181));
+    //this->setPalette(pal);
+    setStyleSheet("background-color:"+DataSystems::Instance().settings___color_header+";");
     setGeometry(QRect(200, 100, 1600, 800));
     //***************** End Установка белого цвета приложения и размеров ****************************//
 
@@ -81,8 +88,11 @@ MainWindow::MainWindow(QWidget *parent) :
                                                                                 "color: white;"
                                                                                 "padding: 4 50 4 10;"
         );
-
-
+    ui->pushButton_clear_log_exec->setStyleSheet(
+        "background-color:"+DataSystems::Instance().settings___color_header+";"
+                                                                                "color: white;"
+                                                                                "padding: 4 50 4 10;"
+        );
 
     //this->maximumSize();
     //run();
@@ -112,22 +122,84 @@ MainWindow::MainWindow(QWidget *parent) :
                                 //"print(a);");
                 //"\nc=a;"); //QString::fromStdString(script));
 
-    OpenFileScript(DataSystems::Instance().savePath+"/"+"src_zero.txt");
+    OpenFileScript(DataSystems::Instance().savePath+"/"+"addshow_startprogram.txt");
 
 
 
     logTimer = new QTimer(this);
     connect(logTimer, SIGNAL(timeout()),this,SLOT(updateLog()));
-    //logTimer->start(250);
+    logTimer->start(1000);
 
     connect(ui->actionOpen_2 , SIGNAL(triggered()), SLOT(OpenFileScript()));
 
+    update_ImageLoad();
+
 }
+
+void MainWindow::update_ImageLoad()
+{
+    QString folder = DataSystems::Instance().savePath + "/";
+    //folder = "d:/img2/";
+
+    std::vector<std::string> vec = csvfile::ReadFiles(folder.toStdString().c_str());
+    ui->comboBox_scripts->clear();
+    for(int k=0; k<vec.size();k++)
+    {
+        if(QString::fromStdString(vec[k]).toLower().contains("txt"))
+        {
+            //logger::WriteLog(folder + QString::fromStdString(vec[k]));
+            ui->comboBox_scripts->addItem(folder + QString::fromStdString(vec[k]));
+        }
+    }
+}
+
+void MainWindow::Addshow()
+{
+    //OutputLog(QString::number(row));
+
+    QString fileNamePicture = DataSystems::Instance().savePath + "/" + "mylene_farmer.jpg";
+    //fileNamePicture = "https://demotivatorium.ru/sstorage/3/2014/09/13001529222202/demotivatorium_ru_a_chto_eto_vi_tut_delaete_a_58272.jpg";
+    Dialog_ViewPhoto dvf2(fileNamePicture, this);
+
+    if(!(dvf2.exec()==QDialog::Accepted))
+    {
+        //QMessageBox::information(this,"Спасибо","Сухостойность");
+    }
+
+    return;
+
+    logger::WriteMsg("Add action");
+    if(DataSystems::Instance().robot_paramfile1==nullptr)return;
+    Dialog_ViewPhoto dvf(DataSystems::Instance().robot_paramfile1);
+    if(!(dvf.exec()==QDialog::Accepted))
+    {
+        //QMessageBox::information(this,"Спасибо","Сухостойность");
+    }
+}
+
+
 
 void MainWindow::updateLog()
 {
-   ui->textEdit_log->setText(DataSystems::Instance().log);
-   ui->textEdit_execution->setText(DataSystems::Instance().log_execution_result);
+    if(DataSystems::Instance().log__lists.size()==0 && DataSystems::Instance().log_execution_result__lists.size()==0)return;
+
+    //ui->textEdit_log->clear();
+    if(DataSystems::Instance().log__lists.size()!=0)logger::WriteMsg("Log actions");
+    for(const QString str_val: DataSystems::Instance().log__lists)
+    {
+        ui->textEdit_log->append(str_val);
+        logger::WriteMsg(str_val.toStdString());
+    }
+    DataSystems::Instance().log__lists.clear();
+
+    //ui->textEdit_execution->clear();
+    if(DataSystems::Instance().log_execution_result__lists.size()!=0)logger::WriteMsg("Log compilation & executions");
+    for(const QString str_val: DataSystems::Instance().log_execution_result__lists)
+    {
+        ui->textEdit_execution->append(str_val);
+        logger::WriteMsg(str_val.toStdString());
+    }
+    DataSystems::Instance().log_execution_result__lists.clear();
 
    QTextCursor cursor_log = ui->textEdit_log->textCursor();
    cursor_log.movePosition(QTextCursor::End);
@@ -136,12 +208,6 @@ void MainWindow::updateLog()
    QTextCursor cursor_execution = ui->textEdit_execution->textCursor();
    cursor_execution.movePosition(QTextCursor::End);
    ui->textEdit_execution->setTextCursor(cursor_execution);
-
-
-   logger::WriteMsg("Log compilation & executions");
-   logger::WriteMsg(DataSystems::Instance().log_execution_result.toStdString());
-   logger::WriteMsg("Log actions");
-   logger::WriteMsg(DataSystems::Instance().log.toStdString());
 
 }
 
@@ -200,7 +266,7 @@ void MainWindow::OpenFileScript()
         return;
     }
     logger::WriteLog("File script: [" + fileScript + "]");
-    updateLog();
+    //updateLog();
 
     QFile *localFile = new QFile(fileScript);
     localFile->open(QFile::ReadOnly);
@@ -214,7 +280,7 @@ void MainWindow::OpenFileScript()
 void MainWindow::OpenFileScript(QString fileScript)
 {
     logger::WriteLog("File script: [" + fileScript + "]");
-    updateLog();
+    //updateLog();
 
     QFileInfo f_info(fileScript);
     if(fileScript.isEmpty())
@@ -238,6 +304,8 @@ void MainWindow::OpenFileScript(QString fileScript)
 
 void MainWindow::run()
 {
+    on_pushButton_clear_log_exec_clicked();
+
     int argc = 0;
     char **argv;
     argv = new char*[3] ();
@@ -311,6 +379,7 @@ void MainWindow::run()
 
         script = "a=357/113;c=a;";
 
+        ui->textEdit_code->update();
         script = ui->textEdit_code->toPlainText().toStdString();
 
         ui->textEdit_code->setText(QString::fromStdString(script));
@@ -446,7 +515,7 @@ void MainWindow::on_pushButton_clicked()
     logger::WriteLog("<<<<<<Start compilation>>>>>>>");
     logger::WriteLog_result_execution("<<<<<<Execution result>>>>>>>");
     run();
-    updateLog();
+    //updateLog();
 }
 
 void MainWindow::on_pushButton_open_script_clicked()
@@ -456,8 +525,20 @@ void MainWindow::on_pushButton_open_script_clicked()
 
 
 void MainWindow::on_pushButton_savescript_clicked()
-{
-    QString fileScript = DataSystems::Instance().savePath+"/"+ QString("script_cscs")+QString::fromStdString(logger::CreateLogName2())+".txt";
+{    
+    ui->textEdit_code->update();
+    QString NameFile = QString("script_cscs") + QString::fromStdString(logger::CreateLogName2());
+    //fileNamePicture = "https://demotivatorium.ru/sstorage/3/2014/09/13001529222202/demotivatorium_ru_a_chto_eto_vi_tut_delaete_a_58272.jpg";
+    Dialog_NameFile dvf(NameFile, this);
+
+    if(!(dvf.exec()==QDialog::Accepted))
+    {
+        //QMessageBox::information(this,"Спасибо","Сухостойность");
+    }
+
+    NameFile = dvf.NameFile;
+
+    QString fileScript = DataSystems::Instance().savePath+"/"+ NameFile+".txt";
     QFile *localFile = new QFile(fileScript);
     localFile->open(QFile::WriteOnly);
     QTextStream out(localFile);
@@ -465,9 +546,10 @@ void MainWindow::on_pushButton_savescript_clicked()
     localFile->close();
 
     QMessageBox::information(this,"Скрипт сохранен в файл",fileScript);
-
     logger::WriteLog("Скрипт сохранен в файл"+fileScript);
-    updateLog();
+
+    update_ImageLoad();
+    //updateLog();
 
 
 }
@@ -500,14 +582,57 @@ void MainWindow::on_pushButton_log_search_clicked()
 {
     searchHighLight_log->searchText(ui->lineEdit_log_search->text().toLower());
 
+    return;
 
-    QTextCursor cursor=ui->textEdit_log->textCursor();
-    cursor.setPosition(cursor.position());
-    cursor.setPosition(cursor.position()+ui->lineEdit_log_search->text().toLower().size(),QTextCursor::KeepAnchor);
-    QTextCharFormat charFormat = cursor.charFormat();
-    charFormat.setBackground(QColor(150, 200, 250));
-    cursor.setCharFormat(charFormat);
-    ui->textEdit_log->setTextCursor(cursor);
+
+    //QTextEdit *aEdit = activeEdit();
+    QString select = ui->textEdit_log->textCursor().selectedText();
+    int sEnd = ui->textEdit_log->textCursor().selectionEnd();
+
+    QTextCursor tx = ui->textEdit_log->textCursor();
+    tx.setPosition(sEnd);
+    ui->textEdit_log->setTextCursor(tx);
+
+    if(ui->textEdit_log->find(select, QTextDocument::FindBackward))
+    {
+    ui->textEdit_log->setTextBackgroundColor(Qt::yellow);
+    }
+
+
+    return;
+
+    ui->textEdit_log->moveCursor(QTextCursor::End);
+    if(ui->textEdit_log->find(ui->lineEdit_log_search->text().toLower(), QTextDocument::FindBackward))
+        ui->textEdit_log->setTextBackgroundColor(Qt::yellow);
+    ui->textEdit_log->moveCursor(QTextCursor::End);
+
+    return;
+
+    //поиск строки по времени
+    QTextCursor cur = ui->textEdit_log->document()->find(ui->lineEdit_log_search->text());
+    ui->textEdit_log->setTextCursor(cur);
+    int numLine = cur.blockNumber();
+
+    int line = ui->textEdit_log->document()->find(ui->lineEdit_log_search->text(), numLine, QTextDocument::FindBackward).blockNumber();
+
+    if (line > 0){
+    QString str = ui->textEdit_log->document()->findBlockByLineNumber(line).text();
+
+    int k = str.indexOf(ui->lineEdit_log_search->text());
+    if (k!=-1){
+      int ii = str.indexOf(QRegExp("[0-9]"),0);
+      str.remove(0,ii);
+      ui->textEdit_log->setText(str);
+    }
+    }
+
+//    QTextCursor cursor=ui->textEdit_log->textCursor();
+//    cursor.setPosition(cursor.position());
+//    cursor.setPosition(cursor.position()+ui->lineEdit_log_search->text().toLower().size(),QTextCursor::KeepAnchor);
+//    QTextCharFormat charFormat = cursor.charFormat();
+//    charFormat.setBackground(QColor(150, 200, 250));
+//    cursor.setCharFormat(charFormat);
+//    ui->textEdit_log->setTextCursor(cursor);
 
     //highlighter_log->searchText(ui->lineEdit_log_search->text().toLower());
     //logger::WriteLog(ui->lineEdit_log_search->text().toLower());
@@ -529,5 +654,26 @@ void MainWindow::on_lineEdit_execution_search_cursorPositionChanged(int arg1, in
     on_lineEdit_execution_search_cursorPosition_arg2 = arg2;
 
 
+}
+
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    ui->textEdit_log->clear();
+    ui->textEdit_execution->clear();
+
+}
+
+
+void MainWindow::on_pushButton_clear_log_exec_clicked()
+{
+    ui->textEdit_log->clear();
+    ui->textEdit_execution->clear();
+}
+
+
+void MainWindow::on_comboBox_scripts_activated(int index)
+{
+    OpenFileScript(ui->comboBox_scripts->currentText());
 }
 

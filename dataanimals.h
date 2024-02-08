@@ -39,9 +39,14 @@ public:
     QString log="";
     QString log_execution_result="";
     QString log_create_db;
+
+    QList<QString> log__lists;
+    QList<QString> log_execution_result__lists;
+
     int id_max;
 
     QString settings___color_header;
+    QString settings___color_header_dialog;
     QString settings___color_header___decimal;
     QString settings___tabwidget_width;
 

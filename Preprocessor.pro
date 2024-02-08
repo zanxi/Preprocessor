@@ -25,6 +25,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+    dialog_namefile.cpp \
+    dialog_viewphoto.cpp \
         main.cpp \
         mainwindow.cpp \
     scripting/Constants.cpp \
@@ -53,6 +55,8 @@ SOURCES += \
     utils/searchhightlight.cpp
 
 HEADERS += \
+    dialog_namefile.h \
+    dialog_viewphoto.h \
         mainwindow.h \
     scripting/Constants.h \
     scripting/Functions.h \
@@ -80,7 +84,11 @@ HEADERS += \
     utils/searchhightlight.h
 
 FORMS += \
+        dialog_namefile.ui \
+        dialog_viewphoto.ui \
         mainwindow.ui
+
+win32:RC_ICONS = preprocessor.ico
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

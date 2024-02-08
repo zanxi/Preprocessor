@@ -32,6 +32,9 @@
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
+            <widget class="QComboBox" name="comboBox_scripts"/>
+           </item>
+           <item>
             <widget class="QTextEdit" name="textEdit_code"/>
            </item>
            <item>
@@ -54,6 +57,13 @@
               <widget class="QPushButton" name="pushButton_savescript">
                <property name="text">
                 <string>Save</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_clear_log_exec">
+               <property name="text">
+                <string>Clear log exec</string>
                </property>
               </widget>
              </item>

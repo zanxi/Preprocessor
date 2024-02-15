@@ -2,6 +2,7 @@
 #define DIALOG_NAMEFILE_H
 
 #include <QDialog>
+#include <QKeyEvent>
 
 namespace Ui {
 class Dialog_NameFile;
@@ -16,6 +17,10 @@ public:
     explicit Dialog_NameFile(QString NameFile, QWidget *parent = nullptr);
     ~Dialog_NameFile();
     QString NameFile;
+
+    virtual void keyPressEvent(QKeyEvent * event);
+    virtual void keyReleaseEvent(QKeyEvent * event);
+
 
 private slots:
     void on_pushButton_2_clicked();

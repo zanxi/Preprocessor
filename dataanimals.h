@@ -46,6 +46,7 @@ public:
     int id_max;
 
     QString settings___color_header;
+    QString settings___color_header_textedit_code;
     QString settings___color_header_dialog;
     QString settings___color_header___decimal;
     QString settings___tabwidget_width;

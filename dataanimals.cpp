@@ -149,8 +149,9 @@ void DataSystems::clear()
     settings___color_header_dialog="#ffffff"; //
     settings___color_header___decimal="(255,108,108)"; //    (255,108,108)
 
-    settings___color_header="#14B143"; // зеленый (20,177,67)
-    settings___color_header___decimal="(20,177,67)"; //    (20,177,67)
+    settings___color_header="#DB24C9"; //    (219,36,201)
+    settings___color_header_textedit_code = "(208, 255, 208)";
+    settings___color_header___decimal="(219,36,201)"; // синий   (219,36,201)
 
 
     settings___tabwidget_width="200px";

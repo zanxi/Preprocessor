@@ -103,6 +103,8 @@ public:
   static const string STARTPROGRAM;
   static const string STARTPROGRAM_2;
   static const string STARTPROGRAM_3;
+  static const string INIT_DATASYSTEMS_CONNECTION;
+  static const string SETSTYLE;
   static const string ADDSHOW;
 
   static const string PRINT;

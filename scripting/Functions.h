@@ -161,6 +161,32 @@ class StartProgram_3Function : public ParserFunction
   virtual Variable evaluate(ParsingScript& script);
 };
 
+
+class Init_Datasystems_ConnecionFunction : public ParserFunction
+{
+  public:
+  Init_Datasystems_ConnecionFunction(bool newLine = true, OS::Color color = OS::Color::NONE) :
+      m_newLine(newLine), m_color(color) {}
+  virtual Variable evaluate(ParsingScript& script);
+
+  private:
+      bool m_newLine;
+      OS::Color m_color;
+};
+
+class SetStyleFunction : public ParserFunction
+{
+  public:
+      SetStyleFunction(bool newLine = true, OS::Color color = OS::Color::NONE) :
+          m_newLine(newLine), m_color(color) {}
+      virtual Variable evaluate(ParsingScript& script);
+
+  private:
+      bool m_newLine;
+      OS::Color m_color;
+};
+
+
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //-------------------------------------------
 class PrintFunction : public ParserFunction

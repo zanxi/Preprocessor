@@ -27,72 +27,16 @@ MainWindow::MainWindow(QWidget *parent) :
     pal.setColor(QPalette::Window, Qt::gray);
     //pal.setColor(QPalette::Window, QRgb(89, 153, 181));
     //this->setPalette(pal);
-    setStyleSheet("background-color:"+DataSystems::Instance().settings___color_header+";");
+    //setStyleSheet("background-color:"+DataSystems::Instance().settings___color_header+";");
     setGeometry(QRect(200, 100, 1600, 800));
     //***************** End Установка белого цвета приложения и размеров ****************************//
 
-    ui->groupBox->setStyleSheet("QGroupBox {"
-                                "background-color: white;"
-                                "}"
-                                "QGroupBox::title {"
-                                "color: white;"
-                                "background-color:"+DataSystems::Instance().settings___color_header+";"
-                                "padding: 4 20000 4 10;"
-                                "}");
-    ui->groupBox_2->setStyleSheet("QGroupBox {"
-                                "background-color: white;"
-                                "}"
-                                "QGroupBox::title {"
-                                "color: white;"
-                                "background-color:"+DataSystems::Instance().settings___color_header+";"
-                                "padding: 4 20000 4 10;"
-                                "}");
-    ui->groupBox_3->setStyleSheet("QGroupBox {"
-                                "background-color: white;"
-                                "}"
-                                "QGroupBox::title {"
-                                "color: white;"
-                                "background-color:"+DataSystems::Instance().settings___color_header+";"
-                                "padding: 4 20000 4 10;"
-                                "}");
+    //setStyleSheet("background-color:"+DataSystems::Instance().settings___color_header+";");
 
-    ui->pushButton->setStyleSheet(
-        "background-color:"+DataSystems::Instance().settings___color_header+";"
-        "color: white;"
-        "padding: 4 50 4 10;"
-        );
-    ui->pushButton_2->setStyleSheet(
-        "background-color:"+DataSystems::Instance().settings___color_header+";"
-        "color: white;"
-        "padding: 4 50 4 10;"
-        );
 
-    ui->pushButton_open_script->setStyleSheet(
-        "background-color:"+DataSystems::Instance().settings___color_header+";"
-                                                                                "color: white;"
-                                                                                "padding: 4 50 4 10;"
-        );
-    ui->pushButton_savescript->setStyleSheet(
-        "background-color:"+DataSystems::Instance().settings___color_header+";"
-                                                                                "color: white;"
-                                                                                "padding: 4 50 4 10;"
-        );
 
-    ui->pushButton_exe_search->setStyleSheet(
-        "background-color:"+DataSystems::Instance().settings___color_header+";"
-                                                                                "color: white;"
-                                                                                "padding: 4 50 4 10;"
-        );
-    ui->pushButton_log_search->setStyleSheet(
-        "background-color:"+DataSystems::Instance().settings___color_header+";"
-                                                                                "color: white;"
-                                                                                "padding: 4 50 4 10;"
-        );
-    ui->pushButton_clear_log_exec->setStyleSheet(
-        "background-color:"+DataSystems::Instance().settings___color_header+";"
-                                                                                "color: white;"
-                                                                                "padding: 4 50 4 10;"
-        );
+
+
 
     //this->maximumSize();
     //run();
@@ -101,16 +45,18 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("Preprocessor cscs");
 
     //ui->textEdit_code->setStyleSheet("background-color: rgb(197, 249, 136)");
-    ui->textEdit_code->setStyleSheet("background-color: rgb(208, 255, 208)");
-    ui->textEdit_execution->setStyleSheet("background-color: rgb(208, 255, 208)");
-    ui->textEdit_log->setStyleSheet("background-color: rgb(208, 255, 208)");
+
 
     highlighter_code = new Highlighter(ui->textEdit_code->document());
-    highlighter_execution = new Highlighter(ui->textEdit_execution->document());
-    highlighter_log = new Highlighter(ui->textEdit_log->document());
+    //highlighter_execution = new Highlighter(ui->textEdit_execution->document());
+    //highlighter_log = new Highlighter(ui->textEdit_log->document());
 
     searchHighLight_execution = new SearchHighLight(ui->textEdit_execution->document());
     searchHighLight_log = new SearchHighLight(ui->textEdit_log->document());
+
+
+
+    ThisStyle(DataSystems::Instance().settings___color_header);
 
     ui->textEdit_code->setText(
                 "a=357/113;"
@@ -122,9 +68,23 @@ MainWindow::MainWindow(QWidget *parent) :
                                 //"print(a);");
                 //"\nc=a;"); //QString::fromStdString(script));
 
-    OpenFileScript(DataSystems::Instance().savePath+"/"+"addshow_startprogram.txt");
+    OpenFileScript(DataSystems::Instance().savePath+"/"+"script_cscs_13-02-2024 10-58-29.58S_.txt");
+
+    //ui->textEdit_code->append("print(\"******************** #SetSyle ****************\");");
+    //ui->textEdit_code->append("setstyle(\"#2222FF\");");
+//    ui->textEdit_code->append("setstyle(\"#2222FF\", \"(208, 255, 208)\");");
+//    ui->textEdit_code->append("setstyle(\"#2222FF\", \"(57, 58, 5)\");");
+//    ui->textEdit_code->append("setstyle(\"#2222FF\", \"(17, 39, 47)\");");
+//    ui->textEdit_code->append("setstyle(\"#2222FF\", \"(37, 32, 27)\");");
+//    ui->textEdit_code->append("setstyle(\"#2222FF\", \"(192,192, 192)\");");
+
+//    ui->textEdit_code->append("setstyle(\"#2222FF\", \"(0, 128, 192)\");");
+//    ui->textEdit_code->append("setstyle(\"#2222FF\", \"(208, 255, 208)\");");
+    //    ui->textEdit_code->append("setstyle(\"#2222FF\", \"(208, 255, 208)\");");
+        //ui->textEdit_code->append("setstyle(\"#2222FF\", \"(81, 134, 129)\");");
 
 
+    on_pushButton_clicked();
 
     logTimer = new QTimer(this);
     connect(logTimer, SIGNAL(timeout()),this,SLOT(updateLog()));
@@ -133,6 +93,49 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionOpen_2 , SIGNAL(triggered()), SLOT(OpenFileScript()));
 
     update_ImageLoad();
+
+}
+
+void MainWindow::ThisStyle(QString color_h)
+{
+
+    setStyleSheet(QString()+"background-color:"+"white"+";");
+    ui->textEdit_code->setStyleSheet("background-color: rgb" + DataSystems::Instance().settings___color_header_textedit_code);
+    ui->textEdit_execution->setStyleSheet("background-color: rgb" + DataSystems::Instance().settings___color_header_textedit_code);
+    ui->textEdit_log->setStyleSheet("background-color: rgb"+DataSystems::Instance().settings___color_header_textedit_code);
+
+    ui->textEdit_code->setForegroundRole(QPalette::ColorRole::Window); //Foreground(QColor("#b973ff"));
+    ui->textEdit_code->setTextColor( QColor( "white" ) );
+    ui->textEdit_execution->setForegroundRole(QPalette::ColorRole::Window); //Foreground(QColor("#b973ff"));
+    ui->textEdit_execution->setTextColor( QColor( "white" ) );
+    ui->textEdit_log->setForegroundRole(QPalette::ColorRole::Window); //Foreground(QColor("#b973ff"));
+    ui->textEdit_log->setTextColor( QColor( "white" ) );
+    //ui->textEdit->setTextColor( QColor( "red" ) );
+
+
+    QList<QPushButton*> allButton = findChildren<QPushButton*>();
+    for(int i=0;i<allButton.size();i++)
+    {
+        allButton[i]->setStyleSheet(
+            "background-color:"+color_h+";"
+                                                                                    "color: white;"
+                                                                                    "padding: 4 50 4 10;");
+    }
+
+    QList<QGroupBox*> allGroup = findChildren<QGroupBox*>();
+    for(int i=0;i<allGroup.size();i++)
+    {
+        allGroup[i]->setStyleSheet(
+            "QGroupBox {"
+            "background-color: white;"
+            "}"
+            "QGroupBox::title {"
+            "color: white;"
+            "background-color:"+color_h+";"
+                                                                "padding: 4 20000 4 10;"
+                                                                "}"
+            );
+    }
 
 }
 
@@ -181,6 +184,9 @@ void MainWindow::Addshow()
 
 void MainWindow::updateLog()
 {
+
+    ThisStyle(DataSystems::Instance().settings___color_header);
+
     if(DataSystems::Instance().log__lists.size()==0 && DataSystems::Instance().log_execution_result__lists.size()==0)return;
 
     //ui->textEdit_log->clear();
@@ -534,7 +540,6 @@ void MainWindow::on_pushButton_savescript_clicked()
     if(!(dvf.exec()==QDialog::Accepted))
     {
         //QMessageBox::information(this,"Спасибо","Сухостойность");
-    }
 
     NameFile = dvf.NameFile;
 
@@ -550,6 +555,11 @@ void MainWindow::on_pushButton_savescript_clicked()
 
     update_ImageLoad();
     //updateLog();
+
+        //return;
+    }
+
+
 
 
 }

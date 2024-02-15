@@ -57,9 +57,11 @@ const string Constants::MORE        = "more";
 const string Constants::PI          = "pi";
 const string Constants::POW         = "pow";
 
+const string Constants::STARTPROGRAM = "startprogram"; // start: digitalfarm, tcptransferclient, tcptransferserver
 const string Constants::STARTPROGRAM_2 = "startprogram_2"; // start: visiocode, qtcreator, qtcreator // maple, msword, msexcel
 const string Constants::STARTPROGRAM_3 = "startprogram_3"; // start: anydesk, paint, visiocode
-const string Constants::STARTPROGRAM = "startprogram"; // start: digitalfarm, tcptransferclient, tcptransferserver
+const string Constants::INIT_DATASYSTEMS_CONNECTION = "init_datasystems_con"; // start: anydesk, paint, visiocode
+const string Constants::SETSTYLE =   "setstyle"; // start: anydesk, paint, visiocode
 const string Constants::ADDSHOW     = "addshow"; // Dialog view photo
 
 const string Constants::PRINT       = "print";

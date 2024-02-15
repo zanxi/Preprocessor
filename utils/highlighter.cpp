@@ -7,6 +7,14 @@ Highlighter::Highlighter(QTextDocument *parent)
 {
     HighlightingRule rule;
 
+    QString clr_branching = "#fd1a1a";
+            clr_branching = "#0683FF";
+    QString clr_branching_CONTINUE = "#00ff66";
+            clr_branching_CONTINUE = "#0683FF";
+    QString clr_branching_typeQualifiers = "#56B6C2";
+            clr_branching_typeQualifiers = "#0683FF";
+
+
     keywordFormat.setForeground(QColor("#569CD6"));
     keywordFormat.setFontWeight(QFont::Light);
 
@@ -123,7 +131,7 @@ Highlighter::Highlighter(QTextDocument *parent)
 
 
 
-    typeQualifiers.setForeground(QColor("#56B6C2"));
+    typeQualifiers.setForeground(QColor(clr_branching_typeQualifiers));
     typeQualifiers.setFontWeight(QFont::Bold);
 
     defaultTypes.setForeground(QColor("#ff55ff"));
@@ -167,68 +175,70 @@ Highlighter::Highlighter(QTextDocument *parent)
     }
 
     numbers.setForeground(QColor("#6e6e6e"));
+    //numbers.setForeground(QColor("#ffffff"));
     rule.pattern = QRegularExpression(QStringLiteral("\\d+$"));
     rule.format = numbers;
     highlightingRules.append(rule);
 
     preprocessorFormat.setForeground(QColor("#4a4adb"));
+    //preprocessorFormat.setForeground(QColor("#ffffff"));
 
     rule.pattern = QRegularExpression(QStringLiteral("#.\\w+"));
     rule.format = preprocessorFormat;
     highlightingRules.append(rule);
 
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\bif\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\btry\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\bcatch\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\bcmp\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\bje\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\bjne\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\bjz\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\bjg\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\bjge\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\bjl\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching.setForeground(QColor("#fd1a1a"));
+    branching.setForeground(QColor(clr_branching));
     rule.pattern = QRegularExpression(QStringLiteral("\\bjle\\b"));
     rule.format = branching;
     highlightingRules.append(rule);
@@ -269,22 +279,24 @@ Highlighter::Highlighter(QTextDocument *parent)
     rule.format = branching;
     highlightingRules.append(rule);
 
-    branching_CONTINUE.setForeground(QColor("#00ff66"));
+    branching_CONTINUE.setForeground(QColor(clr_branching_CONTINUE));
     rule.pattern = QRegularExpression(QStringLiteral("\\bcontinue\\b"));
     rule.format = branching_CONTINUE;
     highlightingRules.append(rule);
 
-    branching_CONTINUE.setForeground(QColor("#00ff66"));
+    branching_CONTINUE.setForeground(QColor(clr_branching_CONTINUE));
     rule.pattern = QRegularExpression(QStringLiteral("\\bnew\\b"));
     rule.format = branching_CONTINUE;
     highlightingRules.append(rule);
 
-    include.setForeground(QColor("#56B6C2"));
+    include.setForeground(QColor(clr_branching_typeQualifiers));
     rule.pattern = QRegularExpression("(?<=#include\\s)(<.*>)|(?<=#include)(<.*>)|(?<=#include\\s)(\".*\")|(?<=#include)(\".*\")|\".*\"");
     rule.format = include;
     highlightingRules.append(rule);
 
     quotationFormat.setForeground(QColor("#D69D85"));
+    //quotationFormat.setForeground(QColor(""));
+
     rule.pattern = QRegularExpression(QStringLiteral("\".*\""));
     rule.format = quotationFormat;
     highlightingRules.append(rule);

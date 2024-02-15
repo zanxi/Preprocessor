@@ -470,7 +470,50 @@ Variable StartProgramFunction::evaluate(ParsingScript& script)
 }
 
 
+//class Init_Datasystems_ConnecionFunction : public ParserFunction
+Variable Init_Datasystems_ConnecionFunction::evaluate(ParsingScript& script)
+{
+    bool isList = false;
+    vector<Variable> args = Utils::getArgs(script,
+                                           Constants::START_ARG, Constants::END_ARG, isList);
+    QString res="";
+    for (size_t i = 0; i < args.size(); i++) {
+    if (m_color == OS::Color::NONE)
+       {
+           res += QString::fromStdString(args[i].toString());
+           //logger::WriteLog_result_execution(QString::fromStdString(args[i].toString()));
+       }
+    }
+    if(res!="")logger::WriteLog_result_execution(res);
+    return Variable::emptyInstance;
+}
 
+
+//class Init_Datasystems_ConnecionFunction : public ParserFunction
+Variable SetStyleFunction::evaluate(ParsingScript& script)
+{
+    bool isList = false;
+    vector<Variable> args = Utils::getArgs(script,
+                                           Constants::START_ARG, Constants::END_ARG, isList);
+    QString res="";
+    for (size_t i = 0; i < args.size(); i++) {
+       if (m_color == OS::Color::NONE)
+       {
+           res += QString::fromStdString(args[i].toString());
+           if(i==0)
+           DataSystems::Instance().settings___color_header = QString::fromStdString(args[i].toString());
+           if(i==1)
+           DataSystems::Instance().settings___color_header_textedit_code = QString::fromStdString(args[i].toString());
+           logger::WriteLog_result_execution(QString::fromStdString(args[i].toString()));
+           if(i==1)break;
+           //logger::WriteLog_result_execution(QString::fromStdString(args[i].toString()));
+       }
+    }
+    //if(res!="")logger::WriteLog_result_execution(res);
+
+    return Variable::emptyInstance;
+
+}
 
 
 //-------------------------------------------
@@ -480,16 +523,18 @@ Variable PrintFunction::evaluate(ParsingScript& script)
   vector<Variable> args = Utils::getArgs(script,
                     Constants::START_ARG, Constants::END_ARG, isList);
   
+  QString res="";
   for (size_t i = 0; i < args.size(); i++) {
     if (m_color == OS::Color::NONE) {
       OS::print(args[i].toString());
-      logger::WriteLog_result_execution(QString::fromStdString(args[i].toString()));
+           res += QString::fromStdString(args[i].toString());
+           //logger::WriteLog_result_execution(QString::fromStdString(args[i].toString()));
     } else {
       OS::printColor(m_color, args[i].toString());
       logger::WriteLog_result_execution(QString("Color: ") + QString::fromStdString(ENUM_TO_STR(m_color)) + "|" + QString::fromStdString(args[i].toString()));
-
     }
   }
+  if(res!="")logger::WriteLog_result_execution(res);
   
   if (m_newLine) {
     OS::print("", true);

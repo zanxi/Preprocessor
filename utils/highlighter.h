@@ -62,6 +62,8 @@ private:
     QTextCharFormat quotationFormat;
     QTextCharFormat include;
     QTextCharFormat functionFormat;
+
+    //QString clr_branching = "#fd1a1a";
 };
 
 #endif // HIGHLIGHTER_H

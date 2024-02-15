@@ -73,6 +73,7 @@ private:
     int on_lineEdit_execution_search_cursorPosition_arg2;
 
     void Addshow();
+    void ThisStyle(QString color_h);
 
     //QString fileName;
 

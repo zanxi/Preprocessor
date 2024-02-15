@@ -44,7 +44,7 @@
         //DataSystems::Instance().log_execution_result+=QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg+"  "+"\n";
         //if(DataSystems::Instance().log_execution_result.size()>18000)DataSystems::Instance().log_execution_result = "";
 
-        DataSystems::Instance().log_execution_result__lists.append(QString(" | ")+QString::fromStdString(datetime::utcExample())+"| message: "+msg);
+        DataSystems::Instance().log_execution_result__lists.append(QString(" | ")+QString::fromStdString(datetime::utcExample())+"| result colmilation&Executive: "+msg);
 
     }
 

@@ -69,3 +69,34 @@ void Dialog_NameFile::on_pushButton_clicked()
     this->close();
 }
 
+
+void Dialog_NameFile::keyPressEvent(QKeyEvent *event)
+{
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+    if (keyEvent->key() == Qt::Key_Enter) {
+        qDebug() << ("keyPressEvent: Enter received");
+    }
+    else if (keyEvent->key() == Qt::Key_A)
+    {
+        qDebug() << ("keyPressEvent: A received");
+    }
+}
+
+void Dialog_NameFile::keyReleaseEvent(QKeyEvent *event)
+{
+    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+    if (keyEvent->key() == Qt::Key_Enter) {
+        qDebug() << ("keyReleaseEvent: Enter received");
+    }
+    else if (keyEvent->key() == Qt::Key_A)
+    {
+        qDebug() << ("keyReleaseEvent: A received");
+    }
+    else if (keyEvent->key() == Qt::Key_Escape)
+    {
+        qDebug() << ("keyReleaseEvent: Escape received");
+        this->close();
+
+    }
+}

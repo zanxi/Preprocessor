@@ -47,6 +47,8 @@ void Interpreter::init()
   ParserFunction::addGlobalFunction(Constants::STARTPROGRAM,  new StartProgramFunction());
   ParserFunction::addGlobalFunction(Constants::STARTPROGRAM_2,  new StartProgram_2Function());
   ParserFunction::addGlobalFunction(Constants::STARTPROGRAM_3,  new StartProgram_3Function());
+  ParserFunction::addGlobalFunction(Constants::SETSTYLE,  new SetStyleFunction());
+  ParserFunction::addGlobalFunction(Constants::INIT_DATASYSTEMS_CONNECTION,  new Init_Datasystems_ConnecionFunction(true));
 
   ParserFunction::addGlobalFunction(Constants::PRINT,       new PrintFunction(true));
   ParserFunction::addGlobalFunction(Constants::PRINT_BLACK, new PrintFunction(true, OS::Color::BLACK));

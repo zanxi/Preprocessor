@@ -1,0 +1,24 @@
+i = 0;
+x=0;
+while (x<2) {
+   i=i+1; 
+   x+=0.7;
+   print(i," x=",x);
+   print("sin(exp(x))*cos(x)",sin(exp(x))*cos(x));
+}
+print("***************************************");
+d=355/113;
+print("d=355/113=",d);
+f=d*sin(3);
+print("f=d*sin(3)=",f);
+print("***************************************");
+//addshow();
+//startprogram();
+//startprogram_2();
+//startprogram_3();
+init_datasystems_con("host: ","127.0.0.1","; dbname: ","vim3","; port: ","5432","; login: ","vim","; password: ","000");
+init_datasystems_con("host: ","127.0.0.1");
+init_datasystems_con("dbname: ","vim3");
+init_datasystems_con("port: ","5432");
+init_datasystems_con("login: ","vim");
+init_datasystems_con("password: ","000");

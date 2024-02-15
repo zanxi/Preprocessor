@@ -1,0 +1,31 @@
+i = 0;
+x=0;
+while (x<22) {
+   i=i+1; 
+   x+=0.7;
+   print("[",i,"] ","[x=",x,"] ","sin(exp(x))*cos(x) = ",sin(exp(x))*cos(x));
+}
+print("***************************************");
+d=355/113;
+print("d=355/113=",d);
+print("***************************************");
+//addshow();
+//startprogram();
+//startprogram_2();
+//startprogram_3();
+init_datasystems_con("host: ","127.0.0.1","; dbname: ","vim3","; port: ","5432","; login: ","vim","; password: ","000");
+init_datasystems_con("host: ","127.0.0.1");
+init_datasystems_con("dbname: ","vim3");
+init_datasystems_con("port: ","5432");
+init_datasystems_con("login: ","vim");
+init_datasystems_con("password: ","000");
+print("******************** #SetSyle ****************");
+//setstyle("#2222FF");
+//setstyle("#14B143");
+//setstyle("#FF6C6C");
+//setstyle("#2222FF");
+//setstyle("#80FFFF");
+//setstyle("#004080");
+setstyle("#48373A");
+setstyle("#2222FF", "(208, 255, 208)");
+setstyle("#2222FF", "(108, 255, 208)");

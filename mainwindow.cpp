@@ -11,6 +11,10 @@
 #include "dataanimals.h"
 #include "dialog_viewphoto.h"
 #include "dialog_namefile.h"
+#include <QPlainTextEdit>
+
+const QString n_textEdit_code = "textEdit_code";
+const QString n_verticalLayout = "verticalLayout";
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -34,7 +38,13 @@ MainWindow::MainWindow(QWidget *parent) :
     //setStyleSheet("background-color:"+DataSystems::Instance().settings___color_header+";");
 
 
+    add_action = new QAction(tr("Создать новый файл с++"), this);
+    add_action->setIcon(QIcon(":/images/preprocessor.ico"));
+    Delete_action = new QAction(tr("Удалить файл"), this);
+    Delete_action->setIcon(QIcon(":/images/preprocessor.ico"));
 
+    connect(add_action , SIGNAL(triggered()), SLOT(CreateScript()));
+    connect(Delete_action , SIGNAL(triggered()), SLOT(DeleteScript()));
 
 
 
@@ -48,10 +58,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     highlighter_code = new Highlighter(ui->textEdit_code->document());
-    //highlighter_execution = new Highlighter(ui->textEdit_execution->document());
+    highlighter_execution = new Highlighter(ui->textEdit_execution->document());
     //highlighter_log = new Highlighter(ui->textEdit_log->document());
 
-    searchHighLight_execution = new SearchHighLight(ui->textEdit_execution->document());
+    //searchHighLight_execution = new SearchHighLight(ui->textEdit_execution->document());
     searchHighLight_log = new SearchHighLight(ui->textEdit_log->document());
 
 
@@ -68,7 +78,10 @@ MainWindow::MainWindow(QWidget *parent) :
                                 //"print(a);");
                 //"\nc=a;"); //QString::fromStdString(script));
 
-    OpenFileScript(DataSystems::Instance().savePath+"/"+"script_cscs_13-02-2024 10-58-29.58S_.txt");
+    //ui->tabWidget->setTabText(0,"script_cscs_13-02-2024 10-58-29.58S_.txt");
+    //DataSystems::Instance().savePath+"/"+"script_cscs_13-02-2024 10-58-29.58S_.txt";
+    OpenFileScript(DataSystems::Instance().savePath+"/"+"aaaaa_cscs.txt");
+    //OpenFileScript("script_cscs_13-02-2024 10-58-29.58S_.txt");
 
     //ui->textEdit_code->append("print(\"******************** #SetSyle ****************\");");
     //ui->textEdit_code->append("setstyle(\"#2222FF\");");
@@ -83,29 +96,73 @@ MainWindow::MainWindow(QWidget *parent) :
     //    ui->textEdit_code->append("setstyle(\"#2222FF\", \"(208, 255, 208)\");");
         //ui->textEdit_code->append("setstyle(\"#2222FF\", \"(81, 134, 129)\");");
 
-
     on_pushButton_clicked();
 
     logTimer = new QTimer(this);
     connect(logTimer, SIGNAL(timeout()),this,SLOT(updateLog()));
-    logTimer->start(1000);
+    //logTimer->start(1000);
 
     connect(ui->actionOpen_2 , SIGNAL(triggered()), SLOT(OpenFileScript()));
-
     update_ImageLoad();
+    connect(ui->tabWidget,SIGNAL(currentChanged( int)),this,SLOT(setCurrent( int))); // tabs - QTabWidget
+
+    ui->tabWidget->setTabsClosable(true);
+
+    connect(ui->tabWidget, SIGNAL(tabCloseRequested(int)), SLOT(on_tabWidget_tabCloseRequested(int)));
+
+
+}
+
+void MainWindow::on_tabWidget_tabCloseRequested(int index)
+{
+    //Conversation *c = convos->at(index-1);
+    //controller->leaveConversation(c);
+    //convos->removeAt(index-1);
+    //delete c;
+    if(ui->tabWidget->count()>1)
+    delete ui->tabWidget->widget(index);
+    else
+    {
+        QTextEdit* txtMsg = ui->tabWidget->currentWidget()->findChild<QTextEdit*>(n_textEdit_code);
+        txtMsg->setText("");
+        ui->tabWidget->setTabText(0,"New File c++");
+    }
+}
+
+
+void MainWindow::setCurrent( int nIndex)
+{
+     // currentPage=tabs->currentWidget(); // curentPage - переменная для хранения текущей страницы.
+     // Для тестирования слота
+    //QMessageBox::information(this, tr("Слот"), tr("Текущий индекс: ")+QString::number( nIndex),    QMessageBox::Ok);
+    //QList<QGroupBox*> allGroup =  ui->tabWidget->findChildren<QGroupBox*>();
+
+    //QWidget *w = qobject_cast<QTabWidget*>(ui->tabWidget->widget(ui->tabWidget->currentIndex()));
+    //QList<QTextEdit*> allTextEdits =  ui->tabWidget->findChildren<QTextEdit*>();
+
+    //logger::WriteLog("Text: " + allTextEdits[0]->placeholderText());
+
+    QTextEdit* txtMsg = ui->tabWidget->currentWidget()->findChild<QTextEdit*>(n_textEdit_code);
+
+    highlighter_code = nullptr;
+    highlighter_code = new Highlighter(txtMsg->document());
+    //Highlighter *highlighter_code = new Highlighter(txtMsg->document());
+
+
 
 }
 
 void MainWindow::ThisStyle(QString color_h)
 {
+    QTextEdit* textEdit_code = ui->tabWidget->currentWidget()->findChild<QTextEdit*>(n_textEdit_code);
 
     setStyleSheet(QString()+"background-color:"+"white"+";");
-    ui->textEdit_code->setStyleSheet("background-color: rgb" + DataSystems::Instance().settings___color_header_textedit_code);
+    textEdit_code->setStyleSheet("background-color: rgb" + DataSystems::Instance().settings___color_header_textedit_code);
     ui->textEdit_execution->setStyleSheet("background-color: rgb" + DataSystems::Instance().settings___color_header_textedit_code);
     ui->textEdit_log->setStyleSheet("background-color: rgb"+DataSystems::Instance().settings___color_header_textedit_code);
 
-    ui->textEdit_code->setForegroundRole(QPalette::ColorRole::Window); //Foreground(QColor("#b973ff"));
-    ui->textEdit_code->setTextColor( QColor( "white" ) );
+    textEdit_code->setForegroundRole(QPalette::ColorRole::Window); //Foreground(QColor("#b973ff"));
+    textEdit_code->setTextColor( QColor( "white" ) );
     ui->textEdit_execution->setForegroundRole(QPalette::ColorRole::Window); //Foreground(QColor("#b973ff"));
     ui->textEdit_execution->setTextColor( QColor( "white" ) );
     ui->textEdit_log->setForegroundRole(QPalette::ColorRole::Window); //Foreground(QColor("#b973ff"));
@@ -137,7 +194,58 @@ void MainWindow::ThisStyle(QString color_h)
             );
     }
 
+    ui->tabWidget->setStyleSheet("QTabWidget"
+                                 "{"
+                                 "   background-color:rgb"+DataSystems::Instance().settings___color_header___decimal+";"
+                                                                                               "}"
+
+                                                                                               "QTabWidget:tab-bar"
+                                                                                               "{"
+                                                                                               "    alignment: center;"
+                                                                                               "}"
+
+                                                                                               "QTabBar:tab"
+                                                                                               "{"
+                                                                                               "   width: "+DataSystems::Instance().settings___tabwidget_width+";"
+                                                                                        "   height: 30px;"
+                                                                                        "}"
+
+                                                                                        "QTabBar:selected"
+                                                                                        "{"
+                                                                                        "    background-color:rgb"+DataSystems::Instance().settings___color_header___decimal+";"
+                                                                                               "    color.rgb"+DataSystems::Instance().settings___color_header___decimal+";"
+                                                                                               "}"
+
+                                                                                               "QTabBar:tab:!selected"
+                                                                                               "{"
+                                                                                               "    color.rgb"+DataSystems::Instance().settings___color_header___decimal+";"
+                                                                                               "}"
+
+
+                                                                                               "QTabBar:tab:!selected:hover"
+                                                                                               "{"
+                                                                                               "    background-color:rgb"+DataSystems::Instance().settings___color_header___decimal+";"
+                                                                                               "    color.rgb(255,255,255);"
+                                                                                               "}"
+                                                                                               ")");
+
+
 }
+
+void MainWindow::mouseReleaseEvent (QMouseEvent * event )
+{
+    QMessageBox* msgBox;
+    if(event->button() == Qt::RightButton)
+    {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*> (event);
+        QMenu *menu = new QMenu(this);
+        menu->addAction(add_action);
+        menu->addAction(Delete_action);
+        menu->exec(mouseEvent->globalPos());
+        //msgBox->setInformativeText("u pressed right button");
+    }
+}
+
 
 void MainWindow::update_ImageLoad()
 {
@@ -155,6 +263,30 @@ void MainWindow::update_ImageLoad()
         }
     }
 }
+
+void MainWindow::CreateScript()
+{
+    QWidget *tab = new QWidget();
+    tab->setObjectName(QString::fromUtf8("tab"));
+    QVBoxLayout *verticalLayout = new QVBoxLayout(tab);
+    verticalLayout->setSpacing(6);
+    verticalLayout->setContentsMargins(11, 11, 11, 11);
+    verticalLayout->setObjectName(n_verticalLayout);
+    QTextEdit *textEdit_code = new QTextEdit(tab);
+    textEdit_code->setObjectName((n_textEdit_code));
+    textEdit_code->setStyleSheet("background-color: rgb" + DataSystems::Instance().settings___color_header_textedit_code);
+    verticalLayout->addWidget(textEdit_code);
+    ui->tabWidget->addTab(tab, QString());
+    ui->tabWidget->setTabText(ui->tabWidget->count()-1,"New c++");
+
+}
+
+void MainWindow::DeleteScript()
+{
+    if(ui->tabWidget->count()>1)
+    ui->tabWidget->removeTab(ui->tabWidget->currentIndex());
+}
+
 
 void MainWindow::Addshow()
 {
@@ -286,7 +418,9 @@ void MainWindow::OpenFileScript()
 void MainWindow::OpenFileScript(QString fileScript)
 {
     logger::WriteLog("File script: [" + fileScript + "]");
+
     //updateLog();
+    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),fileScript);
 
     QFileInfo f_info(fileScript);
     if(fileScript.isEmpty())
@@ -303,7 +437,10 @@ void MainWindow::OpenFileScript(QString fileScript)
     QFile *localFile = new QFile(fileScript);
     localFile->open(QFile::ReadOnly);
     QTextStream in(localFile);
-    ui->textEdit_code->setText(in.readAll());
+
+    QTextEdit* txtMsg = ui->tabWidget->currentWidget()->findChild<QTextEdit*>(n_textEdit_code);
+    txtMsg->setText(in.readAll());
+    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),fileScript);
     localFile->close();
 }
 
@@ -356,40 +493,96 @@ void MainWindow::run()
         //script = Utils::getFileContents(file);
 
         //script = Utils::getFileContents("c:/_2024__/test.cscs");
-        script = "a=1;"
-                "//b=2;"
-                "//c=3;"
-                "//d=4;"
-                "e=5;"
-                "i = 0;"
-                "while (++i < 10) {"
-                    "print(\"i=\", i);    // GO AWAY"
-                "    print(\"a/c=\", a/c);   "
-                "}";
+//        script = "a=1;"
+//                "//b=2;"
+//                "//c=3;"
+//                "//d=4;"
+//                "e=5;"
+//                "i = 0;"
+//                "while (++i < 10) {"
+//                    "print(\"i=\", i);    // GO AWAY"
+//                "    print(\"a/c=\", a/c);   "
+//                "}";
 
-        script = "a=357/113; c=a;"
-                 "i = 0;"
-                 "while (++i < 3) {"
-                     "j=i+1; "
-                     "print(3245);"
-                 "}";
-                //"print(a);";
+//        script = "a=357/113; c=a;"
+//                 "i = 0;"
+//                 "while (++i < 3) {"
+//                     "j=i+1; "
+//                     "print(3245);"
+//                 "}";
+//                //"print(a);";
 
-        script = ""
-                 "i = 0;"
-                 "while (++i < 10) {"
-                     "j=i+1; "
-                     "print(3245);"
-                 "}";
-                //"print(a);";
+//        script = ""
+//                 "i = 0;"
+//                 "while (++i < 10) {"
+//                     "j=i+1; "
+//                     "print(3245);"
+//                 "}";
+//                //"print(a);";
 
-        script = "a=357/113;c=a;";
+//        script = "a=357/113;c=a;";
 
-        ui->textEdit_code->update();
-        script = ui->textEdit_code->toPlainText().toStdString();
+//        ui->textEdit_code->update();
+//        script = ui->textEdit_code->toPlainText().toStdString();
 
-        ui->textEdit_code->setText(QString::fromStdString(script));
+//        ui->textEdit_code->setText(QString::fromStdString(script));
+
+
         //ui->textEdit_code->setBack;
+
+
+        //QWidget *w = qobject_cast<QTabWidget*>(ui->tabWidget->widget(ui->tabWidget->currentIndex()));
+        //QList<QTextEdit*> allTextEdits =  ui->tabWidget->findChildren<QTextEdit*>();
+        //logger::WriteLog("collection Code run count: " + QString::number(allTextEdits.size()));
+
+        //logger::WriteLog("Text: " + allTextEdits[0]->placeholderText());
+        //QTextEdit *te = qobject_cast<QTextEdit*>(allTextEdits[0]);
+        //script = te->placeholderText().toStdString();
+
+        //logger::WriteLog("Code run: " + allTextEdits[0]->placeholderText());
+
+
+//        QTextEdit* pTextEdit = NULL;
+//        QWidget* pWidget= ui->tabWidget->widget(ui->tabWidget->currentIndex()); // for the second tab
+//        // You can use metaobject to get widget type or qobject_cast
+//        if (pWidget->metaObject()->className() == "QTextEdit")
+//            pTextEdit = (QTextEdit*)pWidget;
+//        else
+//        {
+//            QList<QTextEdit *> allTextEdits = pWidget->findChildren<QTextEdit *>();
+//            if (allTextEdits.count() != 1)
+//            {
+//                //qError() << "Error";
+//                logger::WriteLog(QString() + "Code run: " + "Error");
+//                return;
+//            }
+//            pTextEdit = allTextEdits[0];
+//            script = pTextEdit->placeholderText().toStdString();
+//            logger::WriteLog("Code run: " + allTextEdits[0]->placeholderText());
+//        }
+
+        //QTextEdit* tE = ui->tabWidget->currentWidget()->findChild<QTextEdit*>();
+        //script = tE->placeholderText().toStdString();
+        //logger::WriteLog("Code run: " + tE->placeholderText());
+
+//        QTextEdit* txtConv = ui->tabWidget->currentWidget()->findChild<QTextEdit*>(n_textEdit_code);
+//        script = txtConv->placeholderText().toStdString();
+        //script = txtConv->document()->;
+        //logger::WriteLog("Code run: " + txtConv->placeholderText());
+
+        //script =  ui->tabWidget->widget(ui->tabWidget->currentIndex())->findChild<QTextEdit *>("textEdit")->placeholderText().toStdString();
+
+
+        QTextEdit* txtMsg = ui->tabWidget->currentWidget()->findChild<QTextEdit*>(n_textEdit_code);
+        if(txtMsg->toPlainText().length() > 0)
+        {
+            QString source = txtMsg->toPlainText();
+            script = source.toStdString();
+            //logger::WriteLog(QString() + " *************** Code run: " + "|" + source);
+            //txtMsg->clear();
+        }
+
+
 
 
 
@@ -521,7 +714,7 @@ void MainWindow::on_pushButton_clicked()
     logger::WriteLog("<<<<<<Start compilation>>>>>>>");
     logger::WriteLog_result_execution("<<<<<<Execution result>>>>>>>");
     run();
-    //updateLog();
+    updateLog();
 }
 
 void MainWindow::on_pushButton_open_script_clicked()
@@ -543,11 +736,23 @@ void MainWindow::on_pushButton_savescript_clicked()
 
     NameFile = dvf.NameFile;
 
+    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(),NameFile);
+
     QString fileScript = DataSystems::Instance().savePath+"/"+ NameFile+".txt";
     QFile *localFile = new QFile(fileScript);
     localFile->open(QFile::WriteOnly);
     QTextStream out(localFile);
-    out<<ui->textEdit_code->toPlainText();
+
+
+    QTextEdit* txtMsg = ui->tabWidget->currentWidget()->findChild<QTextEdit*>(n_textEdit_code);
+    QString source = "";
+    if(txtMsg->toPlainText().length() > 0)
+    {
+      source = txtMsg->toPlainText();
+      logger::WriteLog(QString() + " *************** Code run: " + "|" + source);
+    }
+
+    out<<source;
     localFile->close();
 
     QMessageBox::information(this,"Скрипт сохранен в файл",fileScript);

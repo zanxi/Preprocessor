@@ -153,8 +153,13 @@ void DataSystems::clear()
     settings___color_header_textedit_code = "(208, 255, 208)";
     settings___color_header___decimal="(219,36,201)"; // синий   (219,36,201)
 
+      //("#2222FF", "(81, 34, 129)"
+    settings___color_header="#2222FF"; //    (219,36,201)
+    settings___color_header_textedit_code = "(81, 34, 129)";
+    settings___color_header___decimal="(219,36,201)"; // синий   (219,36,201)
 
-    settings___tabwidget_width="200px";
+
+    settings___tabwidget_width="700px";
 
     // ****************************************************
 

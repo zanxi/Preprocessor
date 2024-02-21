@@ -41,11 +41,17 @@ public:
     virtual void keyPressEvent(QKeyEvent * event);
     virtual void keyReleaseEvent(QKeyEvent * event);
     void update_ImageLoad();
+    virtual void mouseReleaseEvent (QMouseEvent * event );
 
 private slots:
     void on_pushButton_clicked();
     void OpenFileScript();
     void OpenFileScript(QString fileScript);
+    void setCurrent( int nIndex);
+    void Addshow();
+    void CreateScript();
+    void DeleteScript();
+    void on_tabWidget_tabCloseRequested(int index);
 
 private:
 
@@ -72,7 +78,7 @@ private:
     int on_lineEdit_execution_search_cursorPosition_arg1;
     int on_lineEdit_execution_search_cursorPosition_arg2;
 
-    void Addshow();
+    //void Addshow();
     void ThisStyle(QString color_h);
 
     //QString fileName;
@@ -92,6 +98,9 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+
+    QAction *add_action;
+    QAction *Delete_action;
 
 };
 
